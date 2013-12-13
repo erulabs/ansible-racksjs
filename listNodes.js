@@ -12,4 +12,18 @@ new RacksJS({
         console.log(rack.error);
         return false;
     }
+    rack.cloudLoadBalancers.loadBalancers.all(function (loadBalancers) {
+        loadBalancers.forEach(function (lb) {
+            if (lb.name === config.loadBalancerName) {
+                targetLB = lb;
+            }
+        });
+        if (!targetLB) {
+            console.log('No load balancer named "' + config.loadBalancerName + '" was found - please burst.js first!');
+        } else {
+        	targetLB.listNodes(function (nodes) {
+        		console.log(nodes);
+        	});
+        }
+    });
 });

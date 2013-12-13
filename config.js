@@ -12,7 +12,7 @@ module.exports = {
 	// RacksJS verbosity level
 	// set to zero to only see script-level messaging
 	// set to 5 to see full request/reply chain for every API call
-	verbosity: 5,
+	verbosity: 0,
 	// name of the Ansible inventory file
 	ansibleInventory: 'hosts'
 };

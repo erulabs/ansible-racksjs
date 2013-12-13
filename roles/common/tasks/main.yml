@@ -1,0 +1,11 @@
+---
+- name: Install required packages
+  yum: name={{ item }} state=present
+  with_items:
+   - nginx
+   - git
+
+- name: nginx service state
+  service: name=nginx state=started enabled=yes
+
+

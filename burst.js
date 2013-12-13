@@ -20,9 +20,15 @@ new RacksJS({
         console.log('No servername given - usage: ./burst.js <servername>');
         return false;
     }
-    findOrCreateTargetLB();
+    findOrCreateTargetLB(function () {
+        findOrCreateServer(function (newServer) {
+            addServerToAnsibleConfig(newServer, function () {
+                console.log('New server', serverName, 'is complete! Run ./configure.sh to ensure all hosts are configured correctly!');
+            });
+        });
+    });
 
-    function findOrCreateTargetLB () {
+    function findOrCreateTargetLB (callback) {
         rack.cloudLoadBalancers.loadBalancers.all(function (loadBalancers) {
             loadBalancers.forEach(function (lb) {
                 if (lb.name === config.loadBalancerName) {
@@ -45,7 +51,7 @@ new RacksJS({
                                     console.log('load balancer build complete!');
                                     targetLB = loadbalancer;
                                     targetLB.loadedDetails = details;
-                                    findOrCreateServer();
+                                    callback();
                                 } else {
                                     console.log('Some error occured!', details.status);
                                 }
@@ -57,7 +63,7 @@ new RacksJS({
             }
         });
     };
-    function findOrCreateServer () {
+    function findOrCreateServer (callback) {
         rack.cloudServersOpenStack.servers.all(function (servers) {
             servers.forEach(function (server) {
                 if (server.name === serverName) {
@@ -82,9 +88,8 @@ new RacksJS({
                             } else {
                                 newServer = server;
                                 newServer.loadedDetails = details;
-                                addServerToAnsibleConfig(newServer);
+                                callback(newServer);
                                 console.log('build complete! root pw:', server.adminPass, 'server id:', server.id);
-
                             }
                         });
                     }, 15000);
@@ -93,7 +98,7 @@ new RacksJS({
             });
         });
     };
-    function addServerToAnsibleConfig (server) {
+    function addServerToAnsibleConfig (server, callback) {
         var pubIP = false,
             serverString;
         server.loadedDetails.addresses['public'].forEach(function (addr) {
@@ -107,7 +112,7 @@ new RacksJS({
                 if (err) {
                     console.log('failed to write to ansibleInventory, file:', config.ansibleInventory, 'error:', err);
                 } else {
-                    console.log('New server', serverName, 'is complete! Run ./configure.sh to ensure all hosts are configured correctly!');
+                    callback();
                 }
             });
         } else {

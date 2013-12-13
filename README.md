@@ -1,5 +1,3 @@
-# clone https://github.com/tgerla/ansible-examples
-
 # Add a new server
 burst.js <servername>
 	racksjs script that spins up new webserver with a name from input

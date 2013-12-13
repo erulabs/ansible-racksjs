@@ -1,1 +1,7 @@
+---
 # Playboot for devops test
+- name: apply common configuration to all nodes
+  hosts: webheads
+  user: root
+  roles:
+    - common
