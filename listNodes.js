@@ -8,6 +8,7 @@ new RacksJS({
     apiKey: config.apikey,
     verbosity: config.verbosity
 }, function (rack) {
+    var targetLB = false;
     if (rack.error) {
         console.log(rack.error);
         return false;

@@ -24,6 +24,7 @@ new RacksJS({
         findOrCreateServer(function (newServer) {
             addServerToAnsibleConfig(newServer, function () {
                 console.log('New server', serverName, 'is complete! Run ./configure.sh to ensure all hosts are configured correctly!');
+                console.log("When a host is configured correctly, ./enable.js <servername> to add it to the load balancer!");
             });
         });
     });
@@ -33,7 +34,7 @@ new RacksJS({
             loadBalancers.forEach(function (lb) {
                 if (lb.name === config.loadBalancerName) {
                     targetLB = lb;
-                    findOrCreateServer();
+                    callback();
                 }
             });
             if (!targetLB) {
@@ -48,7 +49,7 @@ new RacksJS({
                                     console.log('Load balancer building...');
                                     progressCheck();
                                 } else if (details.status === 'ACTIVE') {
-                                    console.log('load balancer build complete!');
+                                    console.log('load balancer build complete! LB first public VIP:', details.virtualIps[0].address);
                                     targetLB = loadbalancer;
                                     targetLB.loadedDetails = details;
                                     callback();
@@ -74,6 +75,7 @@ new RacksJS({
             if (newServer) {
                 return false;
             }
+            console.log('building new server: "' + serverName + '"');
             rack.cloudServersOpenStack.servers.new({
                 "name": serverName,
                 "imageRef": config.serverBaseImage,
@@ -107,7 +109,7 @@ new RacksJS({
             }
         });
         if (pubIP) {
-            serverString = serverName + "\tansible_ssh_host=" + pubIP + "\tansible_ssh_user=root\tansible_ssh_pass=" + server.adminPass + "\n";
+            serverString = "\n" + serverName + "\tansible_ssh_host=" + pubIP + "\tansible_ssh_user=root\tansible_ssh_pass=" + server.adminPass + "\n";
             fs.appendFile(config.ansibleInventory, serverString, function (err) {
                 if (err) {
                     console.log('failed to write to ansibleInventory, file:', config.ansibleInventory, 'error:', err);

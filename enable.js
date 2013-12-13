@@ -50,7 +50,6 @@ new RacksJS({
 			    		            	}
 			    		            ], function (reply) {
 			    		            	console.log('node added!');
-			    		            	console.log('cloudLoadBalancer replied:', reply);
 			    		            });
 			    		        }
 	    		        	});

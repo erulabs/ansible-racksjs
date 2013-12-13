@@ -4,8 +4,28 @@
   with_items:
    - nginx
    - git
+   - screen
+   - vim
+   - curl
+   - nodejs
+   - npm
+   - python-pip
+
+- name: Install some RacksJS
+  npm: name=racksjs global=yes state=latest
+
+- name: Install Pyrax for people not cool enough to use RacksJS
+  pip: name=pyrax
 
 - name: nginx service state
   service: name=nginx state=started enabled=yes
 
+- name: Create index.html file
+  template: src=index.html.j2 dest=/usr/share/nginx/html/index.html
 
+- name: Copy stylesheet
+  template: src=style.css.j2 dest=/usr/share/nginx/html/style.css
+
+- name: insert iptables template
+  template: src=iptables.j2 dest=/etc/sysconfig/iptables
+  notify: restart iptables
