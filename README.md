@@ -1,5 +1,6 @@
 # Getting started!
 Hello! :) You _can_ haz devops! Simply edit config.js and add your username and API key and run
+
     ./new.sh aKillerServer
 
 There are other options in that file, but nothing you _need_ to modify. The verbosity setting is fun as it directly controls racksjs verbosity - try setting it to 5! Additionally, this script ought to work on ANY FLAVOR, but it does rely on yum and was only tested on CentOS 6.4
