@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Include racks.js
-var RacksJS = require('./racksjs/racks.js'),
+var RacksJS = require('./racks.js'),
     config = require('./config.js'),
     fs = require('fs');
 

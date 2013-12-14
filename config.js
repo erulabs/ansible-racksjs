@@ -1,7 +1,7 @@
 module.exports = {
 	// Rackspace API Authentication information
-	username: 'seandon',
-	apikey: '295f5d723df3d3a394ed33549e475435',
+	username: '',
+	apikey: '',
 	// The name of our load balancer - if it doesn't exist, it will be created by burst.js
 	loadBalancerName: 'devops_prod_LB',
 	// The base image used for creating servers - this is CentOS 6.4
