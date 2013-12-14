@@ -23,8 +23,9 @@ new RacksJS({
     findOrCreateTargetLB(function () {
         findOrCreateServer(function (newServer) {
             addServerToAnsibleConfig(newServer, function () {
-                console.log('New server', serverName, 'is complete! Run ./configure.sh to ensure all hosts are configured correctly!');
-                console.log("When a host is configured correctly, ./enable.js <servername> to add it to the load balancer!");
+                //console.log('New server', serverName, 'is complete! Run ./configure.sh to ensure all hosts are configured correctly!');
+                //console.log("When a host is configured correctly, ./enable.js <servername> to add it to the load balancer!");
+                console.log("Server added to ansible inventory");
             });
         });
     });
@@ -75,23 +76,27 @@ new RacksJS({
             if (newServer) {
                 return false;
             }
-            console.log('building new server: "' + serverName + '"');
+            process.stdout.write('Server "' + serverName + '" building... ');
             rack.cloudServersOpenStack.servers.new({
                 "name": serverName,
                 "imageRef": config.serverBaseImage,
                 "flavorRef": config.serverFlavor
             }, function (server) {
-                var progressCheck = function () {
+                var lastPer = -10.
+                    progressCheck = function () {
                     setTimeout(function () {  
                         server.details(function (details) {
                             if (details.progress < 100) {
-                                console.log('Server "' + serverName + '" building -', details.progress + '%');
+                                if (details.progress !== lastPer) {
+                                    lastPer = details.progress;
+                                    process.stdout.write(details.progress + '%... ');
+                                }
                                 progressCheck();
                             } else {
                                 newServer = server;
                                 newServer.loadedDetails = details;
                                 callback(newServer);
-                                console.log('build complete! root pw:', server.adminPass, 'server id:', server.id);
+                                console.log("\n'" + serverName + "' complete! root pw:", server.adminPass);
                             }
                         });
                     }, 15000);

@@ -49,7 +49,7 @@ new RacksJS({
 			    		            		"type": "PRIMARY"
 			    		            	}
 			    		            ], function (reply) {
-			    		            	console.log('node added!');
+			    		            	console.log('"' + serverName + '" added to loadBalancer!');
 			    		            });
 			    		        }
 	    		        	});
