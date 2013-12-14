@@ -22,6 +22,9 @@ new RacksJS({
         if (!targetLB) {
             console.log('No load balancer named "' + config.loadBalancerName + '" was found - please burst.js first!');
         } else {
+            targetLB.details(function (details) {
+                console.log('Load balancer at http://' + details.virtualIps[0].address);
+            });
         	targetLB.listNodes(function (nodes) {
         		console.log(nodes);
         	});
