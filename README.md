@@ -14,7 +14,7 @@ however, the full shabang can be very easily run with ./new.sh <servername>
 ./new.js <servername> simply runs: burst.js <servername>, configure.sh, enable.js <servername> and then listNodes.js
 
 ## The full monty
-   ./new.sh <servername>
+    ./new.sh <servername>
 Builds a new server, configures it, and enables it.
 
 ## Add a new server
